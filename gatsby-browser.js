@@ -1,4 +1,6 @@
-import 'src/assets/scss/app.scss';
 import React from 'react';
+import { Provider } from 'react-redux';
+import 'src/assets/scss/app.scss';
+import store from './src/store';
 
-export const wrapRootElement = ({ element }) => <>{element}</>
+export const wrapRootElement = ({ element }) => <Provider store={store}>{element}</Provider>;
