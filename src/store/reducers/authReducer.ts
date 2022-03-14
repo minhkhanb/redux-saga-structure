@@ -1,4 +1,4 @@
-interface Repos {
+export interface Repos {
   [key: string]: string;
 }
 

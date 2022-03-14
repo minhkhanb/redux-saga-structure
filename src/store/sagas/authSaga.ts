@@ -1,5 +1,6 @@
 import { call, put, takeLatest, takeEvery, all } from 'redux-saga/effects';
 import { getGithubRepos } from '@src/services';
+import * as actionCreators from '../actionCreators/auth';
 
 const delay = (ms: number) => new Promise<number>(resolve => setTimeout(resolve, ms));
 
@@ -7,9 +8,9 @@ function* fetchGithubRepos() {
   try {
     const { data } = yield call(getGithubRepos);
 
-    yield put({ type: 'USER_FETCH_SUCCEEDED', repos: data });
-  } catch (e) {
-    yield put({ type: 'USER_FETCH_FAILED', message: (e as any).message });
+    yield put(actionCreators.fetchGithubReposSuccess({ repos: data }));
+  } catch (err) {
+    yield put({ type: 'USER_FETCH_FAILED', err });
   }
 }
 
@@ -21,11 +22,13 @@ function* decrement() {
   yield put({ type: 'DECREMENT' })
 }
 
+// Our worker Saga: will perform the async increment task
 function* incrementAsync() {
   yield delay(3000)
   yield put({ type: 'INCREMENT' })
 }
 
+// Our watcher Saga: spawn a new incrementAsync task on each INCREMENT_ASYNC
 function* authSaga() {
   yield all([
     takeEvery('INCREMENT_REQUESTED', increment),
