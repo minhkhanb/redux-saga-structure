@@ -1,4 +1,5 @@
-import { put, takeEvery, all } from 'redux-saga/effects';
+import { put, takeEvery, all, fork } from 'redux-saga/effects';
+import authSaga from './authSaga';
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -17,6 +18,7 @@ function* watchIncrementAsync() {
 
 export default function* rootSaga() {
   yield all([
+    fork(authSaga),
     helloSaga(),
     watchIncrementAsync()
   ]);

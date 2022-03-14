@@ -1,18 +1,24 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import logger from 'redux-logger';
 
-import authReducer from './reducers/authReducer';
-import authSaga from './sagas/authSaga';
+import rootReducers from './reducers';
+import rootSaga from './sagas';
 
-// create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
-// mount it on the Store
-const store = createStore(
-  authReducer,
-  applyMiddleware(sagaMiddleware)
+
+
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const enhancer = composeEnhancers(
+  applyMiddleware(sagaMiddleware, logger),
 );
 
-sagaMiddleware.run(authSaga);
+const store = createStore(rootReducers, {}, enhancer);
+
+sagaMiddleware.run(rootSaga);
 
 export const dispatch = (action: any) => store.dispatch(action);
 

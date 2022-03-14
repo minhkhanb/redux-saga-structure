@@ -1,13 +1,11 @@
-import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery, all } from 'redux-saga/effects';
 import { getGithubRepos } from '@src/services';
 
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+const delay = (ms: number) => new Promise<number>(resolve => setTimeout(resolve, ms));
 
 function* fetchGithubRepos() {
   try {
     const { data } = yield call(getGithubRepos);
-
-    console.log('data: ', data);
 
     yield put({ type: 'USER_FETCH_SUCCEEDED', repos: data });
   } catch (e) {
@@ -15,14 +13,26 @@ function* fetchGithubRepos() {
   }
 }
 
+function* increment() {
+  yield put({ type: 'INCREMENT' })
+}
+
+function* decrement() {
+  yield put({ type: 'DECREMENT' })
+}
+
 function* incrementAsync() {
-  yield delay(1000)
+  yield delay(3000)
   yield put({ type: 'INCREMENT' })
 }
 
 function* authSaga() {
-  yield takeEvery('INCREMENT_ASYNC', incrementAsync);
-  yield takeLatest('USER_FETCH_REQUESTED', fetchGithubRepos);
+  yield all([
+    takeEvery('INCREMENT_REQUESTED', increment),
+    takeEvery('DECREMENT_REQUESTED', decrement),
+    takeEvery('INCREMENT_ASYNC_REQUESTED', incrementAsync),
+    takeLatest('USER_FETCH_REQUESTED', fetchGithubRepos),
+  ])
 }
 
 export default authSaga;

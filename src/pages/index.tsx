@@ -1,23 +1,18 @@
 import * as React from 'react';
-import store, { dispatch } from '@src/store';
-// import { getGithubRepos } from '@src/services';
+import { dispatch } from '@src/store';
+import { useSelector } from 'react-redux';
+import { AppState } from '@src/store/reducers';
 
 const IndexPage = () => {
+  const { repos, times } = useSelector((state: AppState) => state.auth);
+
   React.useEffect(() => {
     dispatch({ type: 'USER_FETCH_REQUESTED' });
-    // getGithubRepos().then(response => {
-    //   console.log('response: ', response.data);
-    // }).catch(err => {
-    //   console.log('Get github repos failed with err: ', err);
-    // });
   }, []);
 
-  const onIncrement = () => dispatch({ type: 'INCREMENT' });
-  const onDecrement = () => dispatch({ type: 'DECREMENT' });
-  const onIncrementAsync = () => dispatch({ type: 'INCREMENT_ASYNC' });
-
-  const value = store.getState();
-  console.log('state store: ', value);
+  const onIncrement = () => dispatch({ type: 'INCREMENT_REQUESTED' });
+  const onDecrement = () => dispatch({ type: 'DECREMENT_REQUESTED' });
+  const onIncrementAsync = () => dispatch({ type: 'INCREMENT_ASYNC_REQUESTED' });
 
   return (
     <main>
@@ -28,7 +23,7 @@ const IndexPage = () => {
         🎉🎉🎉
       </h1>
       <div>
-        <span>Store: {value}</span>
+        <span>repos: {repos.length}</span>
         <button onClick={onIncrementAsync}>
           Increment after 1 second
         </button>
@@ -42,7 +37,7 @@ const IndexPage = () => {
         </button>
         <hr/>
         <div>
-          Clicked: {value} times
+          Clicked: {times} times
         </div>
       </div>
       <img
