@@ -10,4 +10,8 @@
   .spinner-border {
     @apply border-r-transparent;
   }
+
+  .error-message {
+    @apply text-red-400 text-sm;
+  }
 }

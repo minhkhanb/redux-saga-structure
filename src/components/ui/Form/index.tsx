@@ -18,8 +18,6 @@ import { withProperties } from '@src/utils/type';
 import * as yup from 'yup';
 import Button from '../Button';
 import DirtyFormContext from '@src/components/Router/DirtyFormContext';
-import * as Yup from 'yup';
-import Lazy from 'yup/lib/Lazy';
 
 yup.setLocale({
   mixed: {
@@ -52,7 +50,7 @@ export interface FormProps {
     formState?: FormStateProxy,
     formHandlers?: UseFormReturn<any>,
   ) => any;
-  validationSchema?: Yup.AnyObjectSchema | Lazy<any>;
+  validationSchema?: any;
   defaultValues?: any;
   mode?: 'onBlur' | 'onSubmit' | 'onChange' | undefined;
 }
@@ -106,7 +104,7 @@ const Form: FormComponent = ({
 }: FormProps) => {
   const formHandlers = useForm({
     mode,
-    resolver: validationSchema && yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues,
   });
   React.useEffect(() => {
@@ -131,6 +129,7 @@ const Form: FormComponent = ({
         event.stopPropagation();
       }
     }
+
     return formHandlers.handleSubmit(async values => {
       // const values = formHandlers.getValues({ nest: true })
       try {
