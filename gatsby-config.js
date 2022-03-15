@@ -29,6 +29,7 @@ module.exports = {
       __key: 'images'
     },
     `gatsby-plugin-sass`,
-    `gatsby-plugin-postcss`
+    `gatsby-plugin-postcss`,
+    `gatsby-plugin-emotion`
   ]
 };
