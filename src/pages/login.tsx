@@ -6,17 +6,26 @@ import * as yup from 'yup';
 
 const validationSchema = yup.object().shape({
   email: yup.string().required('Email invalid'),
-  password: yup.string().required('Password invalid'),
+  password: yup.string(),
 });
 
 const LoginPage = () => {
-  const email = 'minhkhanb@gmail.com';
   const clientId = process.env.GATSBY_GITHUB_CLIENT_ID;
 
-  const onClick = () =>
+  const githubAuthorize = (email: string) =>
     navigate(
       `https://github.com/login/oauth/authorize?scope=${email}&client_id=${clientId}`,
     );
+
+  type LoginData = {
+    email: string;
+    password: string;
+  };
+
+  const defaultValues: LoginData = {
+    email: '',
+    password: '',
+  };
 
   return (
     <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -29,11 +38,13 @@ const LoginPage = () => {
         <AppForm
           className="mt-8"
           validationSchema={validationSchema}
-          onSubmit={async (data: any) => {
+          defaultValues={defaultValues}
+          onSubmit={async (data: LoginData) => {
             try {
               console.log('submit data: ', data);
+              githubAuthorize(data.email);
             } catch (err) {
-              console.log('err api: ', err, onClick);
+              console.log('err api: ', err);
             }
           }}
         >
@@ -53,15 +64,16 @@ const LoginPage = () => {
             component={Input}
           />
 
-          <Form.FieldLabel title="Password" />
+          <Form.FieldLabel className="sr-only" title="Password" />
           <Form.Field
             name="password"
             type="password"
             placeholder="Password"
             component={Input}
+            className="sr-only"
           />
 
-          <div className="flex items-center justify-between my-6">
+          <div className="flex items-center justify-between my-6 sr-only">
             <div className="flex items-center">
               <input
                 id="remember-me"
