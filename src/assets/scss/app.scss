@@ -5,3 +5,9 @@
 .wrapper {
   min-height: 100vh;
 }
+
+@layer components {
+  .spinner-border {
+    @apply border-r-transparent;
+  }
+}

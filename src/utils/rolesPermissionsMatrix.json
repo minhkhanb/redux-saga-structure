@@ -1,0 +1,11 @@
+{
+  "home": {
+    "path": "/",
+    "permission": {
+      "Admin": true,
+      "Creator": true,
+      "Moderator": false,
+      "User": false
+    }
+  }
+}

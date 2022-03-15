@@ -1,10 +1,12 @@
 import * as actions from '../actionTypes/auth';
+import { User } from '@src/utils/schema';
 
 export interface Repos {
   [key: string]: string;
 }
 
 export interface AuthState {
+  user?: User;
   repos: Repos[];
   times: number;
 }

@@ -1,5 +1,8 @@
 import React from 'react';
 import { NavBar, NavbarItemProps } from '@src/components/Layout/NavBar';
+import { RouteComponentProps } from '@reach/router';
+import DirtyFormContext from '../Router/DirtyFormContext';
+import AccessChecker from '@src/components/RouterGuard';
 
 const navbarItems: NavbarItemProps[] = [
   {
@@ -25,7 +28,19 @@ const navbarItems: NavbarItemProps[] = [
   },
 ];
 
-const Layout: React.FunctionComponent = ({ children }) => {
+interface LayoutProps {
+  location: RouteComponentProps['location'];
+  noAuth?: boolean;
+}
+
+const Layout: React.FunctionComponent<LayoutProps> = ({
+  children,
+  location,
+  noAuth,
+}) => {
+  // state for dirty form
+  const [forms, setForms] = React.useState({});
+
   return (
     <div className="flex flex-col wrapper">
       <header className="bg-white shadow">
@@ -279,13 +294,18 @@ const Layout: React.FunctionComponent = ({ children }) => {
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <div className="border border-dashed border-gray-200 rounded h-96">
+              <DirtyFormContext.Provider value={{ forms, setForms }}>
+                <AccessChecker noAuth={!!noAuth} location={location}>
+                  {children}
+                </AccessChecker>
+              </DirtyFormContext.Provider>
               {children}
             </div>
           </div>
         </div>
       </main>
       <footer className="w-full max-w-container mx-auto border-t py-10 text-center text-sm text-gray-500 sm:flex sm:items-center sm:justify-center">
-        <p>© 2022 Tailwind Labs Inc. All rights reserved.</p>
+        <p>© 2022 Developer Team. All rights reserved.</p>
       </footer>
     </div>
   );
