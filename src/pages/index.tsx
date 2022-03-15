@@ -2,12 +2,13 @@ import * as React from 'react';
 import { dispatch } from '@src/store';
 import { useSelector } from 'react-redux';
 import { AppState } from '@src/store/reducers';
+import * as actionCreators from '@src/store/actionCreators/auth';
 
 const IndexPage = () => {
   const { repos, times } = useSelector((state: AppState) => state.auth);
 
   React.useEffect(() => {
-    dispatch({ type: 'USER_FETCH_REQUESTED' });
+    dispatch(actionCreators.fetchGithubReposRequested());
   }, []);
 
   const onIncrement = () => dispatch({ type: 'INCREMENT_REQUESTED' });

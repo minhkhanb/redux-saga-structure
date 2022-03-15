@@ -1,3 +1,5 @@
+import * as actions from '../actionTypes/auth';
+
 export interface Repos {
   [key: string]: string;
 }
@@ -12,24 +14,12 @@ const authState: AuthState = {
   times: 0,
 };
 
-const authReducer = (state: AuthState = authState, action: any) => {
+const authReducer = (state: AuthState = authState, action: actions.AuthAction) => {
   switch (action.type) {
-    case 'USER_FETCH_SUCCEEDED':
+    case actions.FETCH_GITHUB_REPOS_SUCCESS:
       return {
         ...state,
         repos: action.repos,
-      };
-
-    case 'INCREMENT':
-      return {
-        ...state,
-        times: state.times + 1,
-      };
-
-    case 'DECREMENT':
-      return {
-        ...state,
-        times: state.times - 1,
       };
 
     default:
